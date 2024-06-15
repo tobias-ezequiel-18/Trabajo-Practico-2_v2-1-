@@ -6,11 +6,13 @@ public class Materias {
 
     private class Nodo{
         ArrayList<Nodo> siguientes;
+        Nodo padre;
         Materia materia;
         
         Nodo(){
             siguientes = new ArrayList<Nodo>(256);
             materia = null;
+            padre = null;
         }
     }
 
@@ -44,11 +46,14 @@ public class Materias {
         int[] materiaASCII = ConvertirAASCII(materia);
         int i = 0;
         Nodo actual = this.raiz;
-        while (i != materia.length()){  
+        Nodo padre = new Nodo();
+        while (i != materia.length()){
             if (actual.siguientes.get(materiaASCII[i]) == null){
                 Nodo nuevo = new Nodo();
                 actual.siguientes.set(materiaASCII[i],nuevo);
+                nuevo.padre = actual;
             }else{
+                actual.siguientes.get(materiaASCII[i]).padre = actual;
                 actual = actual.siguientes.get(materiaASCII[i]);
             }
             i++;
@@ -57,7 +62,33 @@ public class Materias {
     }
 
     public void Eliminar(String materia){
-        
+        Nodo actual = Buscar(materia);
+        actual.materia = null;
+        while (NoTieneHijos(actual.siguientes) || actual.materia != null){
+            actual = actual.padre;
+        }
+
+    }
+
+    private boolean NoTieneHijos(ArrayList<Nodo> hijos){
+        for (int i = 0; i < hijos.size(); i++){
+            if (hijos.get(i) != null){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Asumiendo que la materia está en el Trie.
+    private Nodo Buscar(String materia){
+        Nodo actual = raiz;
+        int[] materiaASCII = ConvertirAASCII(materia);
+        int i = 0;
+        while (i != materia.length()){  
+            actual = actual.siguientes.get(materiaASCII[i]);
+            i++;
+        }
+        return actual;
     }
 
     private int[] ConvertirAASCII(String materia){
