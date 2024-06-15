@@ -64,10 +64,13 @@ public class Materias {
     public void Eliminar(String materia){
         Nodo actual = Buscar(materia);
         actual.materia = null;
+        int[] materiaASCII = ConvertirAASCII(materia);
+        int i = materia.length() - 1;
         while (NoTieneHijos(actual.siguientes) || actual.materia != null){
             actual = actual.padre;
+            actual.siguientes.set(i,null);
+            i --;
         }
-
     }
 
     private boolean NoTieneHijos(ArrayList<Nodo> hijos){
