@@ -4,50 +4,67 @@ import java.util.ArrayList;
 
 public class Carreras{
 
+    /*
+     * Invariante de representación:
+     */
+
     private class Nodo{
         ArrayList<Nodo> siguientes;
-        Materias materias;
+        Materias materias; // Este es el siginificado de un nodo.
         
         Nodo(){
             siguientes = new ArrayList<Nodo>(256);
+            for (int i = 0; i < 255; i++){
+                siguientes.add(null);
+            }
             materias = null;
         }
     }
 
     private Nodo raiz;
 
+    // Constructor de la clase.
     public Carreras(){
         raiz = new Nodo();
     }
 
-    public boolean Pertenece(String carrera){
-        Nodo actual = raiz;
+    // Decide si una carrera está definida.
+    public boolean Definida(String carrera){
         if (raiz == null){
             return false;
         }
+        Nodo actual = raiz;
         int[] carreraASCII = ConvertirAASCII(carrera);
         int i = 0;
-        while (i != carrera.length()){
+        while (i < carrera.length()){
             if (actual.siguientes.get(carreraASCII[i]) == null){
                 return false;
             } else {
                 actual = actual.siguientes.get(carreraASCII[i]);
             }
+            i++;
         }
-        return true;
+        // Si salimos del while, vemos si el nodo actual tiene significado.
+        if (actual.materias == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
+    // Define un par (carrera,materias). Si ya está definida, actualiza su valor.
     public void Insertar(String carrera, Materias materias){
         if (raiz == null){
             raiz = new Nodo();
         }
+        Nodo actual = raiz;
         int[] carreraASCII = ConvertirAASCII(carrera);
         int i = 0;
-        Nodo actual = this.raiz;
-        while (i != carrera.length()){  
+        while (i < carrera.length()){  
             if (actual.siguientes.get(carreraASCII[i]) == null){
                 Nodo nuevo = new Nodo();
                 actual.siguientes.set(carreraASCII[i],nuevo);
+                actual = nuevo;
             }else{
                 actual = actual.siguientes.get(carreraASCII[i]);
             }
@@ -56,11 +73,12 @@ public class Carreras{
         actual.materias = materias;
     }
 
+    // Convierte una cadena de caracteres en una secuencia de enteros (según ASCII).
     private int[] ConvertirAASCII(String carrera){
-        int[] nuevo = new int[carrera.length()];
+        int[] carreraASCII = new int[carrera.length()];
         for (int i = 0; i < carrera.length(); i++){
-            nuevo[i] = (int) carrera.charAt(i);
+            carreraASCII[i] = (int) carrera.charAt(i);
         }
-        return nuevo;
+        return carreraASCII;
     }
 }
