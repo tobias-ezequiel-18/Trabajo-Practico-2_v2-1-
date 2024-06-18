@@ -6,7 +6,6 @@ public class Materias {
 
     private class Nodo{
         ArrayList<Nodo> siguientes;
-        Nodo padre;
         Materia materia;
         int cantHijos;
         
@@ -16,7 +15,6 @@ public class Materias {
                 siguientes.add(null);
             }
             materia = null;
-            padre = null;
             cantHijos = 0;
         }
     }
@@ -52,30 +50,6 @@ public class Materias {
         }
     }
 
-    /*
-    public void Insertar(String materia, Materia nueva_materia){
-        if (raiz == null){
-            raiz = new Nodo();
-        }
-        int[] materiaASCII = ConvertirAASCII(materia);
-        int i = 0;
-        Nodo actual = this.raiz;
-        Nodo padre = new Nodo();
-        while (i != materia.length()){
-            if (actual.siguientes.get(materiaASCII[i]) == null){
-                Nodo nuevo = new Nodo();
-                actual.siguientes.set(materiaASCII[i],nuevo);
-                nuevo.padre = actual;
-            }else{
-                actual.siguientes.get(materiaASCII[i]).padre = actual;
-                actual = actual.siguientes.get(materiaASCII[i]);
-            }
-            i++;
-        }
-        actual.materia = nueva_materia;
-    }
-    */
-
     // Define un par (materia, materia_info). Si ya está definida, actualiza su valor.
     public void Definir(String materia, Materia materia_info){
         if (raiz == null){
@@ -97,20 +71,6 @@ public class Materias {
         }
         actual.materia = materia_info;
     }
-
-    /*
-    public void Eliminar(String materia){
-        Nodo actual = Buscar(materia);
-        actual.materia = null;
-        int[] materiaASCII = ConvertirAASCII(materia);
-        int i = materia.length() - 1;
-        while (NoTieneHijos(actual.siguientes) || actual.materia != null){
-            actual = actual.padre;
-            actual.siguientes.set(i,null);
-            i --;
-        }
-    }
-    */
 
     // Borra una materia y su información asociada. Asumimos que la materia está definida.
     public void Borrar(String materia){
@@ -134,16 +94,6 @@ public class Materias {
         actual.materia = null;
     }
 
-    private boolean NoTieneHijos(ArrayList<Nodo> hijos){
-        for (int i = 0; i < hijos.size(); i++){
-            if (hijos.get(i) != null){
-                return false;
-            }
-        }
-        return true;
-    }
-    
-
     // Asumiendo que la materia está en el Trie.
     private Nodo Buscar(String materia){
         Nodo actual = raiz;
@@ -162,6 +112,34 @@ public class Materias {
             nuevo[i] = (int) materia.charAt(i);
         }
         return nuevo;
-    } 
+    }
+
+
+    /*              IDEA INORDER
+
+    private ArrayList<StringBuffer> materiasInOrderAux (Nodo actual){
+        return materiasInOrderAux(actual, "", []);
+    }
+
+    private ArrayList<StringBuffer> materiasInOrderAux (Nodo actual, StringBuffer palabra, ArrayList<StringBuffer> palabras){ // la función empezaría con los dos últimos parámetros vacios
+        if (actual.cantHijos == 0) { //Cuando llega a un fin, devuelve el ArrayList que encontró
+            palabras.add(palabra); //Añado la palabra en la que estoy porque sé que es una materia
+            return palabras;
+        }
+        else { //Si tiene hijos:
+            if (actual.materia != null) { //Si estoy parado en una materia, añado a palabras
+                palabras.add(palabra);
+            }
+            int longitud_palabra = palabra.length();
+            for (int i = 0; i<256; i++){ //Por cada rama posible:
+                if (actual.siguientes.get(i) != null) { //Si efectivamente es una rama:
+                    palabra.append((char)i); //Añado el carácter a palabra
+                    palabras.addAll(materiasInOrderAux(actual.siguientes.get(i), palabra, palabras)); //Concateno con la recursión
+                    palabra = new StringBuffer(palabra.substring(0, longitud_palabra)); //Reestablezco la palabra a como estaba antes de entrar a la recursión (creo que hace falta)
+                } //El problema sería que (si funciona), por como está ahora, habrían repetidos (aunque las primeras apariciones estarían en orden)
+            }
+        }
+
+        */
     
 }

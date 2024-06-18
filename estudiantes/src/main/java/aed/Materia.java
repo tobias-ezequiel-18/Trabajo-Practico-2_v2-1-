@@ -9,18 +9,22 @@ public class Materia {
     private int ay2;
     private int cantAlumnos;
     private ArrayList<String> listaAlumnos;
-    private ListaEnlazada materiasEquivalentes;
+    private ArrayList<ParCarreraMateria> materiasEquivalentes;
 
-    public Materia(){
-        this.cantAlumnos= 0;
-        this.listaAlumnos = new ArrayList<String>();
-        this.materiasEquivalentes.raiz = null;
-        this.profesor = 0;
-        this.jtp = 0;
-        this.ay1 = 0;
-        this.ay2 = 0;
+    // Constructor de la clase.
+    public Materia(ArrayList<ParCarreraMateria> equivalentes){
+        cantAlumnos= 0;
+        listaAlumnos = new ArrayList<String>();
+        for (int i = 0; i < equivalentes.size(); i++){
+            materiasEquivalentes.add(equivalentes.get(i));
+        }
+        profesor = 0;
+        jtp = 0;
+        ay1 = 0;
+        ay2 = 0;
     }
 
+    // Agrega un docente al plantel.
     public void Agregardocente(String docente){
         if (docente == "PROFE"){
             this.profesor++;
@@ -38,6 +42,7 @@ public class Materia {
 
     }
 
+    // Devuelve el plantel docente de la materia.
     public ArrayList<Integer> PlantelDocente(){
         ArrayList<Integer> plantel = new ArrayList<Integer>(4);
 
@@ -49,6 +54,7 @@ public class Materia {
         return plantel;
     }
 
+    // Determina si la cantidad de inscriptos excede el cupo.
     public boolean ExcedeCupo(){
         if (this.cantAlumnos/this.profesor > 250 &&
             this.cantAlumnos/this.jtp > 100 && 
