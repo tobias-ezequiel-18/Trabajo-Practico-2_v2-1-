@@ -7,14 +7,14 @@ public class Materia {
     private int jtp;
     private int ay1;
     private int ay2;
-    private int cantAlumnos;
-    private ArrayList<String> listaAlumnos;
+    private int cantEstudiantes;
+    private ArrayList<String> listaEstudiantes;
     private ArrayList<ParCarreraMateria> materiasEquivalentes;
 
     // Constructor de la clase.
     public Materia(ArrayList<ParCarreraMateria> equivalentes){
-        cantAlumnos= 0;
-        listaAlumnos = new ArrayList<String>();
+        cantEstudiantes= 0;
+        listaEstudiantes = new ArrayList<String>();
         for (int i = 0; i < equivalentes.size(); i++){
             materiasEquivalentes.add(equivalentes.get(i));
         }
@@ -39,7 +39,6 @@ public class Materia {
                 }
             }
         }
-
     }
 
     // Devuelve el plantel docente de la materia.
@@ -54,12 +53,23 @@ public class Materia {
         return plantel;
     }
 
+    public void InscribirEstudiantes(ArrayList<String> estudiantes){
+        for (int i = 0; i < estudiantes.size(); i++){
+            InscribirAlumno(estudiantes.get(i));
+        }
+    }
+
+    public void InscribirAlumno(String estudiante){
+        cantEstudiantes++;
+        listaEstudiantes.add(estudiante);
+    }
+
     // Determina si la cantidad de inscriptos excede el cupo.
     public boolean ExcedeCupo(){
-        if (this.cantAlumnos/this.profesor > 250 &&
-            this.cantAlumnos/this.jtp > 100 && 
-            this.cantAlumnos/this.ay1 > 20 && 
-            this.cantAlumnos/this.ay2 > 30){
+        if (this.cantEstudiantes/this.profesor > 250 &&
+            this.cantEstudiantes/this.jtp > 100 && 
+            this.cantEstudiantes/this.ay1 > 20 && 
+            this.cantEstudiantes/this.ay2 > 30){
             return true;
         }else{
             return false;

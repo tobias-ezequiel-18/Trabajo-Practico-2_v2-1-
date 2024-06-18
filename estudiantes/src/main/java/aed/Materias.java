@@ -95,7 +95,7 @@ public class Materias {
     }
 
     // Asumiendo que la materia está en el Trie.
-    private Nodo Buscar(String materia){
+    public Materia Buscar(String materia){
         Nodo actual = raiz;
         int[] materiaASCII = ConvertirAASCII(materia);
         int i = 0;
@@ -103,7 +103,7 @@ public class Materias {
             actual = actual.siguientes.get(materiaASCII[i]);
             i++;
         }
-        return actual;
+        return actual.materia;
     }
 
     private int[] ConvertirAASCII(String materia){
@@ -114,8 +114,7 @@ public class Materias {
         return nuevo;
     }
 
-
-    /*              IDEA INORDER
+    /*              IDEA INORDER 1
 
     private ArrayList<StringBuffer> materiasInOrderAux (Nodo actual){
         return materiasInOrderAux(actual, "", []);
@@ -141,5 +140,25 @@ public class Materias {
         }
 
         */
-    
+
+    /*              IDEA INORDER 2
+
+    private ArrayList<StringBuffer> materiasInOrder (Nodo actual){
+        ArrayList<StringBuffer> materias = new ArrayList<StringBuffer>();
+        materiasInOrderAux(actual, new StringBuffer(), materias); // Últimos dos parámetros vacíos: "" y [].
+        return materias;
+    }
+
+    private void materiasInOrderAux (Nodo actual, StringBuffer materia, ArrayList<StringBuffer> materias){ // La función empezaría con los dos últimos parámetros vacíos.
+        if (actual.materia != null){
+            materias.add(materia);
+        }
+        for (int i = 0; i < 256; i++){ // La forma de recorrer del for, garantiza que se sigue el orden lexicográfico.
+            if (actual.siguientes.get(i) != null){ // Si esto no se cumple para ningun i (el nodo no tiene hijos), el programa finaliza.
+                materiasInOrderAux(actual.siguientes.get(i), materia.append((char) i), materias);
+            }
+        }
+    }
+    */
+
 }

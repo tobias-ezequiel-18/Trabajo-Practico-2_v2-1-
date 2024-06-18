@@ -17,7 +17,10 @@ public class SistemaSIU {
     }
 
     public void inscribir(String estudiante, String carrera, String materia){
-        throw new UnsupportedOperationException("Método no implementado aún");
+        Materias materiasCarrera = carreras.Buscar(carrera); //        O(|c|)
+        Materia materiaBuscada = materiasCarrera.Buscar(materia);//    O(|m|)
+        estudiantes.Inscribir(estudiante);//                           O(1) -> Porque el LU es acotado.
+        materiaBuscada.InscribirAlumno(estudiante);
     }
 
     public void agregarDocente(CargoDocente cargo, String carrera, String materia){

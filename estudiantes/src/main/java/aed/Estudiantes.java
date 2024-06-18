@@ -30,7 +30,7 @@ public class Estudiantes {
         return actual;
     }
 
-    public void Insertar(String estudiante){
+    public void Definir(String estudiante){
         if (raiz == null){
             raiz = new Nodo();
         }

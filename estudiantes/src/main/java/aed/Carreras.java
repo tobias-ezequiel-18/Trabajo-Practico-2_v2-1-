@@ -53,7 +53,7 @@ public class Carreras{
     }
 
     // Define un par (carrera,materias). Si ya está definida, actualiza su valor.
-    public void Insertar(String carrera, Materias materias){
+    public void Definir(String carrera, Materias materias){
         if (raiz == null){
             raiz = new Nodo();
         }
@@ -71,6 +71,17 @@ public class Carreras{
             i++;
         }
         actual.materias = materias;
+    }
+
+    public Materias Buscar(String carrera){
+        Nodo actual = raiz;
+        int[] materiaASCII = ConvertirAASCII(carrera);
+        int i = 0;
+        while (i != carrera.length()){  
+            actual = actual.siguientes.get(materiaASCII[i]);
+            i++;
+        }
+        return actual.materias;
     }
 
     // Convierte una cadena de caracteres en una secuencia de enteros (según ASCII).
