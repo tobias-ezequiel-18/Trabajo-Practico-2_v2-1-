@@ -9,7 +9,10 @@ public class Estudiantes {
 
         Nodo (){
             inscripciones = 0;
-            siguientes = new ArrayList<Nodo>(10);
+            siguientes = new ArrayList<Nodo>(256);
+            for (int i = 0; i < 256; i++){
+                siguientes.add(null);
+            }
         }
     }
 
@@ -41,6 +44,7 @@ public class Estudiantes {
             if (actual.siguientes.get(estudianteASCII[i]) == null){
                 Nodo nuevo = new Nodo();
                 actual.siguientes.set(estudianteASCII[i],nuevo);
+                actual = nuevo;
             }else{
                 actual = actual.siguientes.get(estudianteASCII[i]);
             }
@@ -48,11 +52,18 @@ public class Estudiantes {
         }
     }
 
-    public void Inscribir (String estudiante){
+    public int cantidadInscripciones(String estudiante){
+        Nodo nodoEstudiante = Buscar(estudiante);
+        return nodoEstudiante.inscripciones;
+    }
+
+    // Asumiendo que el estudiante está definido.
+    public void Inscribir (String estudiante){ 
         Nodo nodoEstudiante = Buscar(estudiante);
         nodoEstudiante.inscripciones++;
     }
 
+    // Asumiendo que el estudiante está definido y está inscripto al menos en una carrera.
     public void Desinscribir(String estudiante){
         Nodo nodoEstudiante = Buscar(estudiante);
         nodoEstudiante.inscripciones--;
