@@ -87,8 +87,8 @@ public class Materias {
             actual = actual.siguientes.get(materiaASCII[i]);
             i++;
         }
-        if (actual != ultimo_nodo){
-            ultimo_nodo.siguientes.set(materiaASCII[ultimo_indice + 1], null);
+        if (actual != ultimo_nodo && actual.cantHijos == 0){ // Arreglo un bug: no estaba chequeando si actual tenía hijos.
+            ultimo_nodo.siguientes.set(materiaASCII[ultimo_indice], null);
             ultimo_nodo.cantHijos --;
         }
         actual.materia = null;

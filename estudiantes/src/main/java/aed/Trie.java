@@ -100,11 +100,11 @@ public class Trie<T> {
             actual = actual.siguientes.get((int) clave.charAt(i));
             i++;
         }
-        if (actual != ultimo_nodo){
+        if (actual != ultimo_nodo && actual.cantHijos == 0){
             ultimo_nodo.siguientes.set((int) clave.charAt(ultimo_indice + 1), null);
             ultimo_nodo.cantHijos --;
         }
         actual.definicion = null;
         size --;
     }
-}
+    }

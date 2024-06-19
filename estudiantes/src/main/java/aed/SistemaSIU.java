@@ -20,7 +20,7 @@ public class SistemaSIU {
         Materias materiasCarrera = carreras.Buscar(carrera); //        O(|c|)
         Materia materiaBuscada = materiasCarrera.Buscar(materia);//    O(|m|)
         estudiantes.Inscribir(estudiante);//                           O(1) -> Porque el LU es acotado.
-        materiaBuscada.InscribirAlumno(estudiante);
+        materiaBuscada.InscribirEstudiante(estudiante);
     }
 
     public void agregarDocente(CargoDocente cargo, String carrera, String materia){

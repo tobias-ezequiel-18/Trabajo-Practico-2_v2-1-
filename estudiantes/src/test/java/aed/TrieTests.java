@@ -59,16 +59,18 @@ public class TrieTests {
         assertTrue(nuevo_trie.Definido("shore"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test // Agregar y borrar elementos
     void agregar_y_borrar_elementos(){
+        @SuppressWarnings("rawtypes")
         Trie nuevo_trie = new Trie<>();
         assertEquals(0, nuevo_trie.Longitud());
 
         // Agrego
-        assertFalse(nuevo_trie.Definido("Hola"));
-        nuevo_trie.Definir("Hola", 0);
+        assertFalse(nuevo_trie.Definido("Álgebra I"));
+        nuevo_trie.Definir("Álgebra I", 0);
         assertEquals(1, nuevo_trie.Longitud());
-        assertTrue(nuevo_trie.Definido("Hola"));
+        assertTrue(nuevo_trie.Definido("Álgebra I"));
 
         assertFalse(nuevo_trie.Definido("Holanda"));
         nuevo_trie.Definir("Holanda", 1);

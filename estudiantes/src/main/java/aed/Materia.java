@@ -9,14 +9,15 @@ public class Materia {
     private int ay2;
     private int cantEstudiantes;
     private ArrayList<String> listaEstudiantes;
-    private ArrayList<ParCarreraMateria> materiasEquivalentes;
+    private ParCarreraMateria[] materiasEquivalentes; // Conviene usar un array de longitud fija, porque agregamos materias solo al iniciar un sistema nuevo.
 
     // Constructor de la clase.
-    public Materia(ArrayList<ParCarreraMateria> equivalentes){
+    public Materia(ParCarreraMateria[] equivalentes){
         cantEstudiantes= 0;
         listaEstudiantes = new ArrayList<String>();
-        for (int i = 0; i < equivalentes.size(); i++){
-            materiasEquivalentes.add(equivalentes.get(i));
+        materiasEquivalentes = new ParCarreraMateria[equivalentes.length];
+        for (int i = 0; i < equivalentes.length; i++){
+            materiasEquivalentes[i] = equivalentes[i];
         }
         profesor = 0;
         jtp = 0;
@@ -45,21 +46,21 @@ public class Materia {
     public ArrayList<Integer> PlantelDocente(){
         ArrayList<Integer> plantel = new ArrayList<Integer>(4);
 
-        plantel.set(0,this.profesor);
-        plantel.set(1,this.jtp);
-        plantel.set(2,this.ay1);
-        plantel.set(3,this.ay2);
+        plantel.add(profesor);
+        plantel.add(jtp);
+        plantel.add(ay1);
+        plantel.add(ay2);
 
         return plantel;
     }
 
     public void InscribirEstudiantes(ArrayList<String> estudiantes){
         for (int i = 0; i < estudiantes.size(); i++){
-            InscribirAlumno(estudiantes.get(i));
+            InscribirEstudiante(estudiantes.get(i));
         }
     }
 
-    public void InscribirAlumno(String estudiante){
+    public void InscribirEstudiante(String estudiante){
         cantEstudiantes++;
         listaEstudiantes.add(estudiante);
     }
