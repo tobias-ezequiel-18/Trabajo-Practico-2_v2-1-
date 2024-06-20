@@ -1,80 +1,80 @@
 package aed;
-import java.util.*;
 
+import java.util.*;
 public class Estudiantes {
+    private Nodo raiz;
 
     private class Nodo {
-        int inscripciones; // Significado del nodo
+        int inscripciones ;
         ArrayList<Nodo> siguientes;
 
         Nodo (){
             inscripciones = 0;
-            siguientes = new ArrayList<Nodo>(256);
-            for (int i = 0; i < 256; i++){
-                siguientes.add(null);
-            }
+            siguientes = new ArrayList<Nodo>(10);
         }
     }
-
-    private Nodo raiz;
 
     public Estudiantes(){
         raiz = new Nodo();
     }
 
-    public Nodo Buscar(String estudiante){
-        int[] estudianteASCII = ConvertirAASCII(estudiante);
-        int i = 0;
-        Nodo actual = raiz;
-        while (i < estudiante.length()){
-            actual = actual.siguientes.get(estudianteASCII[i]);
-            i++;
-        }
-        return actual;
-    }
-
-    public void Definir(String estudiante){
+    public void InsertarAlumno(String alumno){
         if (raiz == null){
             raiz = new Nodo();
         }
-        int[] estudianteASCII = ConvertirAASCII(estudiante);
+        int[] alumnoASCII = ConvertirAASCII(alumno);
         int i = 0;
-        Nodo actual = raiz;
-        while (i < estudiante.length()){
-            if (actual.siguientes.get(estudianteASCII[i]) == null){
+        Nodo actual = this.raiz;
+        while (i != alumno.length()){
+            if (actual.siguientes.get(alumnoASCII[i]) == null){
                 Nodo nuevo = new Nodo();
-                actual.siguientes.set(estudianteASCII[i],nuevo);
-                actual = nuevo;
+                actual.siguientes.set(alumnoASCII[i],nuevo);
             }else{
-                actual = actual.siguientes.get(estudianteASCII[i]);
+                actual = actual.siguientes.get(alumnoASCII[i]);
             }
             i++;
         }
     }
 
-    public int cantidadInscripciones(String estudiante){
-        Nodo nodoEstudiante = Buscar(estudiante);
-        return nodoEstudiante.inscripciones;
+    public void Inscribir (String alumno){
+        int[] alumnoASCII = ConvertirAASCII(alumno);
+        int i = 0;
+        Nodo actual = this.raiz;
+        while (i != alumno.length()){
+            actual = actual.siguientes.get(alumnoASCII[i]);
+            i++;
+        }
+        actual.inscripciones++;
     }
 
-    // Asumiendo que el estudiante está definido.
-    public void Inscribir (String estudiante){ 
-        Nodo nodoEstudiante = Buscar(estudiante);
-        nodoEstudiante.inscripciones++;
+    public void Desinscribir(String alumno){
+        int[] alumnoASCII = ConvertirAASCII(alumno);
+        int i = 0;
+        Nodo actual = this.raiz;
+        while (i != alumno.length()){
+            actual = actual.siguientes.get(alumnoASCII[i]);
+            i++;
+        }
+        actual.inscripciones--;
     }
 
-    // Asumiendo que el estudiante está definido y está inscripto al menos en una carrera.
-    public void Desinscribir(String estudiante){
-        Nodo nodoEstudiante = Buscar(estudiante);
-        nodoEstudiante.inscripciones--;
+    public int Inscripciones (String alumno){
+        int[] alumnoASCII = ConvertirAASCII(alumno);
+        int i = 0;
+        Nodo actual = this.raiz;
+        while (i != alumno.length()){
+            actual = actual.siguientes.get(alumnoASCII[i]);
+            i++;
+        }
+        return actual.inscripciones;    
     }
 
-    private int[] ConvertirAASCII(String estudiante){
-        int[] nuevo = new int[estudiante.length()];
-        for (int i = 0; i < estudiante.length(); i++){
-            nuevo[i] = (int) estudiante.charAt(i);
+    private int[] ConvertirAASCII(String alumno){
+        int[] nuevo = new int[alumno.length()];
+        for (int i = 0; i < alumno.length(); i++){
+            nuevo[i] = (int) alumno.charAt(i);
         }
         return nuevo;
     } 
-
+    
 }
