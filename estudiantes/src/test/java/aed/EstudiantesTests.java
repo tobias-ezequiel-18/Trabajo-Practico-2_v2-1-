@@ -1,7 +1,6 @@
 package aed;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class EstudiantesTests {
@@ -26,7 +25,7 @@ public class EstudiantesTests {
         Estudiantes estudiantes = new Estudiantes();
 
         for (int i = 0; i < libretas.length; i ++) {
-            estudiantes.Definir(libretas[i]);
+            estudiantes.InsertarEstudiante(libretas[i]);
         }
 
         for (int i = 0; i < libretas.length; i++) {

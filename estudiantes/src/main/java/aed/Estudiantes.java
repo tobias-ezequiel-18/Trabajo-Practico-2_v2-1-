@@ -1,80 +1,41 @@
 package aed;
 
-import java.util.*;
 public class Estudiantes {
-    private Nodo raiz;
 
-    private class Nodo {
-        int inscripciones ;
-        ArrayList<Nodo> siguientes;
+    /* Invariante de Representación
 
-        Nodo (){
-            inscripciones = 0;
-            siguientes = new ArrayList<Nodo>(10);
-        }
-    }
+        ~ Es un árbol (null es un árbol, y una tupla que contiene un elemento de T y una secuencia de árboles<T>, es un árbol<T>)
+        ~ No hay nodos inútiles o (bien dicho) los nodos, si no están en la longitud 7 (contando a la raíz), tienen hijos (o sea, para cada nodo: al menos un elemento de la ArrayList<Nodo> siguientes != null)
+        ~ Para cada nodo en la altura 7: nodo.inscripciones >= 0
+        ~ La longitud de siguientes de cada nodo es 256
+        
+    */
 
+    private Trie<Integer> dict;
+
+    // Constructor de la clase ~ O(1)
     public Estudiantes(){
-        raiz = new Nodo();
+        dict = new Trie<>();
     }
 
-    public void InsertarAlumno(String alumno){
-        if (raiz == null){
-            raiz = new Nodo();
-        }
-        int[] alumnoASCII = ConvertirAASCII(alumno);
-        int i = 0;
-        Nodo actual = this.raiz;
-        while (i != alumno.length()){
-            if (actual.siguientes.get(alumnoASCII[i]) == null){
-                Nodo nuevo = new Nodo();
-                actual.siguientes.set(alumnoASCII[i],nuevo);
-            }else{
-                actual = actual.siguientes.get(alumnoASCII[i]);
-            }
-            i++;
-        }
+    // Define un Estudiante ~ O(1) Asumiendo que estudiante es acotado
+    public void InsertarEstudiante(String estudiante){
+        dict.Definir(estudiante, 0);
     }
 
-    public void Inscribir (String alumno){
-        int[] alumnoASCII = ConvertirAASCII(alumno);
-        int i = 0;
-        Nodo actual = this.raiz;
-        while (i != alumno.length()){
-            actual = actual.siguientes.get(alumnoASCII[i]);
-            i++;
-        }
-        actual.inscripciones++;
+    // Suma una inscripción a la cantidad de inscripciones de un estudiante.
+    public void Inscribir(String estudiante){
+        dict.Definir(estudiante, dict.Buscar(estudiante) + 1);
     }
 
-    public void Desinscribir(String alumno){
-        int[] alumnoASCII = ConvertirAASCII(alumno);
-        int i = 0;
-        Nodo actual = this.raiz;
-        while (i != alumno.length()){
-            actual = actual.siguientes.get(alumnoASCII[i]);
-            i++;
-        }
-        actual.inscripciones--;
+    // Resta una inscripción a la cantidad de inscripciones de un estudiante.
+    public void Desinscribir(String estudiante){ // O(n), n siendo la longitud del string estudiante y el resto de operaciones son O(1)
+        dict.Definir(estudiante, dict.Buscar(estudiante) - 1);
     }
 
-    public int Inscripciones (String alumno){
-        int[] alumnoASCII = ConvertirAASCII(alumno);
-        int i = 0;
-        Nodo actual = this.raiz;
-        while (i != alumno.length()){
-            actual = actual.siguientes.get(alumnoASCII[i]);
-            i++;
-        }
-        return actual.inscripciones;    
+    // Devuelve la cantidad de inscripciones de un estudiante.
+    public Integer Inscripciones(String estudiante){
+        Integer inscripciones = dict.Buscar(estudiante);
+        return inscripciones;
     }
-
-    private int[] ConvertirAASCII(String alumno){
-        int[] nuevo = new int[alumno.length()];
-        for (int i = 0; i < alumno.length(); i++){
-            nuevo[i] = (int) alumno.charAt(i);
-        }
-        return nuevo;
-    } 
-    
 }

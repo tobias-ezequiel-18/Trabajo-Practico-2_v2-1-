@@ -26,13 +26,9 @@ public class MateriasTests {
     @Test
     void nuevo_trie_materias(){
         Materias materias = new Materias();
-
         // Comprobamos que ninguna de las materias de infoMaterias pertenece al Trie.
-        for (int i = 0; i < nombresMaterias.length; i++){
-            assertFalse(materias.Definida(nombresMaterias[i]));
-            }
-        }
-
+        assertEquals(new String[0].length, materias.listarMaterias().length);
+    }
 
     @Test
     void agregar_materias(){
@@ -45,7 +41,6 @@ public class MateriasTests {
             }
     }
     
-
     @Test
     void borrar_materias(){
         Materias materias = new Materias();

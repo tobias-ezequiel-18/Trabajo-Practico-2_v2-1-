@@ -2,35 +2,43 @@ package aed;
 
 import java.util.*;
 
-public class ListaEnlazada<T> {
-    // Completar atributos privados
+public class ListaEnlazada<T,F> {
+
+    /*  Invariante de Representación
+
+        ~ No hay ciclos
+        ~ Size tiene que representar la cantidad de nodos en la lista
+        ~ Todos los nodos tienen que poder ser accedidos recorriendo la lista desde la cabeza
+        ~ El último nodo tiene que apuntar a null
+        ~ Si primero != null -> primero.anterior == null
+     
+    */
+
     private Nodo primero;
     private int size;
     private class Nodo {
-        // Completar
-        Materias listamaterias;
-        String nombremateria;
+        T listaMaterias;
+        F nombreMateria;
         Nodo siguiente;
         Nodo anterior;
-        Nodo (T valor){
+        Nodo (F nombre,T materias){ // O(1) unicamente operaciones elementales
             this.anterior = null;
             this.siguiente = null;
-            this.listamaterias = listamaterias;
-            this.nombremateria =nombremateria;
+            this.listaMaterias = materias;
+            this.nombreMateria = nombre;
 
         }
     }
 
-    public ListaEnlazada() {
+    // Constructor de la clase.
+    public ListaEnlazada() {    // O(1)
         this.primero =null;
     }
+    
 
-    public int longitud() {
-        return size;
-    }
-
-    public void agregarAdelante(T elem) {
-        Nodo nuevo = new Nodo(elem);
+    // Agrega un elemento al principio de la lista.
+    public void agregarAdelante(T lista, F materia) { //O(1) porque todas las operaciones son elementales
+        Nodo nuevo = new Nodo(materia,lista);
         if (primero == null){
             primero = nuevo;
         }else {
@@ -39,38 +47,48 @@ public class ListaEnlazada<T> {
             primero = nuevo ;
             nuevo.anterior = null;
         }
-         
+
         size++;
+    }
+    
+    private class ListaIterador implements Iterador<T, F> {
+        Nodo actual;
+        Nodo previo;
+
+        public ListaIterador(Nodo primerNodo) { //O(1) porque todas las operaciones son elementales
+            this.actual = primerNodo;
+            this.previo = null;
+        }
+
+        public boolean haySiguiente() { //O(1) porque todas las operaciones son elementales
+            return actual != null;
+        }
+
+        public boolean hayAnterior() {  //O(1) porque todas las operaciones son elementales
+            return previo != null;
+        }
+
+        public Pair<T, F> siguiente() { //O(1) porque todas las operaciones son elementales
+            if (!haySiguiente()) {
+                throw new NoSuchElementException();
+            }
+            previo = actual;
+            actual = actual.siguiente;
+            return new Pair<>(previo.listaMaterias, previo.nombreMateria);
+        }
+
+        public Pair<T, F> anterior() {  //O(1) porque todas las operaciones son elementales
+            if (!hayAnterior()) {
+                throw new NoSuchElementException();
+            }
+            actual = previo;
+            previo = actual.anterior;
+            return new Pair<>(actual.listaMaterias, actual.nombreMateria);
+        }
     }
 
-    public void agregarAtras(Materias lista , String materia) {
-        Nodo nuevo = new Nodo(null);
-        nuevo.listamaterias = lista;
-        nuevo.nombremateria = materia;
-        if (primero == null){
-            primero = nuevo;
-            size++;
-            return;
-        }
-        Nodo last = primero;
-        while (last.siguiente != null){
-            last = last.siguiente;
-        }
-        last.siguiente=nuevo;
-        nuevo.anterior = last;
-        nuevo.siguiente = null;
-        size++;
+    // Devuelve un iterador de la lista.
+    public Iterador<T, F> iterador() {  //O(1) porque todas las operaciones son elementales
+        return new ListaIterador(primero);
     }
-   /*  public T obtener(int i) {
-        Nodo actual = primero;
-        int contador = 0;
-        while (actual != null){
-            if(contador == i){
-                return actual.valor;
-            }
-            contador++;
-            actual = actual.siguiente;
-        }
-        return null;
-    } */
 }

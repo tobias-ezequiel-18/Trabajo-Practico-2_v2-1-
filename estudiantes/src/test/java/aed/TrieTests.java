@@ -15,6 +15,7 @@ public class TrieTests {
     @SuppressWarnings("unchecked")
     @Test // Agregar elementos
     void agregar_elementos(){
+        @SuppressWarnings("rawtypes")
         Trie nuevo_trie = new Trie<>();
         assertEquals(0, nuevo_trie.Longitud());
 

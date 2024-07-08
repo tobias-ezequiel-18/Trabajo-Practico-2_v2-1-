@@ -26,18 +26,18 @@ public class Trie<T> {
     private Nodo raiz;
     private int size;
 
-    // Constructor de la clase
+    // Constructor de la clase ~ O(1)
     public Trie(){
         raiz = new Nodo();
         size = 0;
     }
 
-    // Devuelve la longitud de la instancia.
+    // Devuelve la longitud de la instancia. ~ O(1)
     public int Longitud(){
         return size;
     }
 
-    // Decide si una clave está definida en el Trie.
+    // Decide si una clave está definida en el Trie. ~ O(|clave|)
     public boolean Definido(String clave){
         if (raiz == null){
             return false;
@@ -62,7 +62,7 @@ public class Trie<T> {
         }
     }
 
-    // Define un par (clave,valor) en el Trie. Si ya está definido, actualiza el valor.
+    // Define un par (clave,valor) en el Trie. Si ya está definido, actualiza el valor. ~ O(|clave|)
     public void Definir(String clave, T valor){
         if (raiz == null){
             raiz = new Nodo();
@@ -86,7 +86,7 @@ public class Trie<T> {
         actual.definicion = valor;
     }
 
-    // Borra una clave y su valor asociado del trie. Asumimos que la clave está definida.
+    // Borra una clave y su valor asociado del trie. Asumimos que la clave está definida. O(|clave|)
     public void Borrar(String clave){
         Nodo actual = raiz;
         Nodo ultimo_nodo = raiz;
@@ -107,4 +107,36 @@ public class Trie<T> {
         actual.definicion = null;
         size --;
     }
+
+    // Busca el valor correspondiente a la clave. Asumimos que esta última está definida. O(|clave|)
+    public T Buscar(String clave){
+        Nodo actual = raiz;
+        int i = 0;
+        while (i < clave.length()){
+            actual = actual.siguientes.get((int) clave.charAt(i));
+            i++;
+        }
+        return actual.definicion;
     }
+
+    // Devuelve un ArrayList con los nombres de todas las claves definidas.
+    public String[] listarClaves() {  // O(n) porque listar claves es O(n) y el resto de operaciones son elementales
+        ArrayList<String> resultado = new ArrayList<>();
+        listarClavesRecursivo(raiz, "", resultado);
+        return resultado.toArray(new String[0]);
+    }
+
+    private void listarClavesRecursivo(Nodo nodo, String prefijo, ArrayList<String> resultado) {  // O(n), siendo n la longitud de la materia más larga
+        if (nodo == null) {
+            return;
+        }
+        if (nodo.definicion != null) {
+            resultado.add(prefijo);
+        }
+        for (int i = 0; i < 255; i++) {
+            if (nodo.siguientes.get(i) != null) {
+                listarClavesRecursivo(nodo.siguientes.get(i), prefijo + (char) i, resultado); // O(n) porque tiene que hacer una recursión por cada nodo del trie
+            }
+        }
+    }
+}
