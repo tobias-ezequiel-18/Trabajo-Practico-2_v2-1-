@@ -1,11 +1,19 @@
-// Implementación genérica de un Trie únicamente para usar como referencia.
-
 package aed;
 
 import java.util.ArrayList;
 
 // Las claves del Trie siempre van a ser de tipo String.
 public class Trie<T> {
+
+    /* Invariante de Representación
+    
+        ~ Es un árbol
+        ~ No tiene nodos inútiles
+        ~ Size es la cantidad de nodos cuya definición es distinta de null
+        ~ La longitud de siguientes de cada nodo es 256
+        ~ cantHijos es igual a la cantidad de elementos en siguientes que != null
+    
+    */
 
     private class Nodo {
         ArrayList<Nodo> siguientes;
@@ -26,13 +34,13 @@ public class Trie<T> {
     private Nodo raiz;
     private int size;
 
-    // Constructor de la clase ~ O(1)
+    // Constructor de la clase ~ O(1) (Solo operaciones elementales)
     public Trie(){
         raiz = new Nodo();
         size = 0;
     }
 
-    // Devuelve la longitud de la instancia. ~ O(1)
+    // Devuelve la longitud de la instancia. ~ O(1) (Solo operaciones elementales)
     public int Longitud(){
         return size;
     }
@@ -45,7 +53,7 @@ public class Trie<T> {
         else {
             Nodo actual = raiz;
             int i = 0;
-            while(i < clave.length()){
+            while(i < clave.length()){  // O(|clave|)
                 if (actual.siguientes.get((int) clave.charAt(i)) == null){
                     return false;
                 } else {
@@ -72,7 +80,7 @@ public class Trie<T> {
         }
         Nodo actual = raiz;
         int i = 0;
-        while (i < clave.length()){
+        while (i < clave.length()){ // O(|clave|)
             if (actual.siguientes.get((int) clave.charAt(i)) == null){
                 Nodo nuevo = new Nodo();
                 actual.siguientes.set((int) clave.charAt(i), nuevo);
@@ -92,7 +100,7 @@ public class Trie<T> {
         Nodo ultimo_nodo = raiz;
         int ultimo_indice = 0;
         int i = 0;
-        while (i < clave.length()){
+        while (i < clave.length()){ // O(|clave|)
             if (actual.cantHijos > 1 || actual.definicion != null){
                 ultimo_nodo = actual;
                 ultimo_indice = i;
@@ -101,7 +109,7 @@ public class Trie<T> {
             i++;
         }
         if (actual != ultimo_nodo && actual.cantHijos == 0){
-            ultimo_nodo.siguientes.set((int) clave.charAt(ultimo_indice + 1), null);
+            ultimo_nodo.siguientes.set((int) clave.charAt(ultimo_indice), null);
             ultimo_nodo.cantHijos --;
         }
         actual.definicion = null;
@@ -112,30 +120,49 @@ public class Trie<T> {
     public T Buscar(String clave){
         Nodo actual = raiz;
         int i = 0;
-        while (i < clave.length()){
+        while (i < clave.length()){ // O(|clave|)
             actual = actual.siguientes.get((int) clave.charAt(i));
             i++;
         }
         return actual.definicion;
     }
 
-    // Devuelve un ArrayList con los nombres de todas las claves definidas.
-    public String[] listarClaves() {  // O(n) porque listar claves es O(n) y el resto de operaciones son elementales
-        ArrayList<String> resultado = new ArrayList<>();
-        listarClavesRecursivo(raiz, "", resultado);
-        return resultado.toArray(new String[0]);
+    public String[] listarClaves() { // O(n), con n la cantidad de nodos en el Trie
+        int numClaves = contarClaves(raiz); // Vemos la cantidad de claves definidas
+        ArrayList<String> resultado = new ArrayList<>(numClaves);
+        StringBuffer prefijo = new StringBuffer();
+        listarClavesRecursivo(raiz, prefijo, resultado);
+        return resultado.toArray(new String[numClaves]);
     }
-
-    private void listarClavesRecursivo(Nodo nodo, String prefijo, ArrayList<String> resultado) {  // O(n), siendo n la longitud de la materia más larga
+    
+    private int contarClaves(Nodo nodo) { // O(n)
+        if (nodo == null) {
+            return 0;
+        }
+        int cantidad = 0;
+        if (nodo.definicion != null) {
+            cantidad = 1;
+        }
+        for (int i = 0; i < 255; i++) {
+            if (nodo.siguientes.get(i) != null) {
+                cantidad += contarClaves(nodo.siguientes.get(i));
+            }
+        }
+        return cantidad;
+    }
+    
+    private void listarClavesRecursivo(Nodo nodo, StringBuffer prefijo, ArrayList<String> resultado) { // O(n)
         if (nodo == null) {
             return;
         }
         if (nodo.definicion != null) {
-            resultado.add(prefijo);
+            resultado.add(prefijo.toString());
         }
         for (int i = 0; i < 255; i++) {
             if (nodo.siguientes.get(i) != null) {
-                listarClavesRecursivo(nodo.siguientes.get(i), prefijo + (char) i, resultado); // O(n) porque tiene que hacer una recursión por cada nodo del trie
+                prefijo.append((char) i);
+                listarClavesRecursivo(nodo.siguientes.get(i), prefijo, resultado);
+                prefijo.deleteCharAt(prefijo.length() - 1);
             }
         }
     }

@@ -1,12 +1,11 @@
 package aed;
 
-import java.util.*;
-
 public class Materia {
 
     /*  Invariante de Representación
 
         ~ profesores, jtp, ay1, ay2, cantidadEstudiantes >= 0
+        ~ listaEstudiantes cumple InvRep de Trie
         ~ No hay repetidos en listaEstudiantes
         ~ La longitud de listaEstudiantes tiene que ser igual a cantidadEstudiantes
         ~ No hay repetidos en materiasEquivalentes
@@ -20,14 +19,14 @@ public class Materia {
     private int ay1;
     private int ay2;
     private int cantidadEstudiantes;
-    private ArrayList<String> listaEstudiantes;
+    private Trie<String> listaEstudiantes;
     private ListaEnlazada<Materias,String> materiasEquivalentes;
 
     // Constructor de la clase.
     public Materia(){   // O(1) porque son todas operaciones elementales
         this.cantidadEstudiantes= 0;
-        this.listaEstudiantes = new ArrayList<String>();
-        this.materiasEquivalentes = new ListaEnlazada<>();
+        this.listaEstudiantes = new Trie<String>();
+        this.materiasEquivalentes = new ListaEnlazada<>(); // O(1)
     }
 
     // Agrega a la materia un cargo del docente pasado como parámetro.
@@ -77,10 +76,9 @@ public class Materia {
     }
 
     // Agrega un estudiante a la materia.
-    public void AgregarEstudiante(String estudiante){   //  O(1) porque son todas operaciones elementales (agregar en un ArrayList es O(1))
+    public void AgregarEstudiante(String estudiante){   //  O(1)
         this.cantidadEstudiantes++;
-        this.listaEstudiantes.add(estudiante);
-
+        this.listaEstudiantes.Definir(estudiante, estudiante);
     }
 
     // Agrega una materia equivalente a la actual.
@@ -88,9 +86,9 @@ public class Materia {
         this.materiasEquivalentes.agregarAdelante(listamaterias,materia);
     }
 
-    // Devuelve un ArrayList con los estudiantes inscriptos en la materia.
-    public ArrayList<String> ListarEstudiantes(){   //  O(1) porque son todas operaciones elementales
-        return this.listaEstudiantes;
+    // Devuelve un Array de Strings con los estudiantes inscriptos en la materia.
+    public String[] ListarEstudiantes(){   //  O(n)
+        return this.listaEstudiantes.listarClaves();
     }
 
     // Devuelve la cantidad de estudiantes inscriptos.
